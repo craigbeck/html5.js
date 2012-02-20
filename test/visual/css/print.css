@@ -1,4 +1,4 @@
-.print-styles article {
+article.print, .print-styles article {
 	border: 5px dotted #000;
 }
 @media print {

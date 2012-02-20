@@ -3,57 +3,56 @@
 	<head>
 		<meta charset="utf-8">
 		<title>IEPP Test Suite</title>
-		<link rel="stylesheet" href="data/inline-mixed-media.css">
-		<link rel="stylesheet" href="data/inline-print-media.css">
-		<link rel="stylesheet" href="data/print.css" media="print">
-		<link rel="stylesheet" href="data/screen.css" media="screen, projection">
-		<link rel="stylesheet" href="data/print-styles.css" media="print">
+		<link rel="stylesheet" href="css/mixed.css">
+		<link rel="stylesheet" href="css/print.css" media="print">
+		<link rel="stylesheet" href="css/screen.css" media="screen, projection">
 		<style>
+			body {
+				background: url(media/body-crash.png);
+			}
 			form {
 				margin: 0;
 			}
-			article#inline-print {
-				border: 5px solid #000;
-			}
-			section div article {
-				border: 5px solid #000;
-			}
-			section[data-article="article"] {
+			article#inline-print, section div article {
 				border: 5px solid #000;
 			}
 		</style>
 		<style media="print">
-			article#inline-print {
-				border: 5px dotted #000;
-			}
-			section div article {
-				border: 5px dotted #000;
-			}
-			section[data-article="article"] {
+			article#inline-print, section div article {
 				border: 5px dotted #000;
 			}
 			p+article {
 				text-decoration: underline;
 			}
 		</style>
-		<script src="../src/html5shiv-printshiv.js"></script>
+		<script src="../../html5.js"></script>
+		<script>
+			html5.install({ 'all': true });
+		</script>
+		<script src="//use.typekit.com/fbz1vwc.js"></script>
+		<script>
+			Typekit.load();
+		</script>
 	</head>
-	<body id="print-body-id" class="print-body-class">
+	<body>
 		<h1>
-			Print Me in IE!
+			Print Preview
 		</h1>
 		<p>
-			You should see dotted broders in print.
+			You should see dotted borders in print preview.
+		</p>
+		<p>
+			The IE tab/window <mark>should not</mark> crash <strong>and</strong> print preview <mark>should not</mark> throw an error.
 		</p>
 		<article class="inline-mixed-media">
 			<p>
-				1. This text should be underlined in IE7+.
+				1. This text should be underlined in print preview (IE7+).
 			</p>
 		</article>
 		<article class="inline-print-media">
-			<form action="/test/ test">
+			<form action="/test">
 				<div class="inside-of-form">
-					2. inside print
+					2. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam non
 				</div>
 			</form>
 		</article>
@@ -75,13 +74,12 @@
 			</p>
 		</article>
 		<section>
-			<div data-article="article">
+			<div>
 				<article>
 					<p>
 						6. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam non
 					</p>
-
-					<section data-article="article">
+					<section>
 						<p>
 							7. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam non
 						</p>

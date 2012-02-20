@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>HTML5.js</title>
+		<style id="trick">
+			[hidden] {
+				display: none;
+			}
+		</style>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="../../html5.js"></script>
+		<script>
+			html5.install({ 'all': true });
+			var trick = document.getElementById('trick');
+			trick.parentNode.removeChild(trick);
+		</script>
+	</head>
+	<body>
+		<section style="border:0;">
+			This sentence has no border <mark>with these words highlighted</mark>.
+		</section>
+		<section>
+			Can we trick the display test? This sentence is in a green box <mark>with these words highlighted</mark>.
+		</section>
+		<section class="fail" hidden="">
+			This sentence should be hidden.
+		</section>
+		<section>
+			<iframe src="iframe.html" style="width:100%;height:100%;" frameborder="0"></iframe>
+		</section>
+	<body>
+</html>

@@ -1,85 +1,38 @@
 <!doctype html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>IE&lt;9 HTML5 Shiv Tests</title>
-		<link rel="stylesheet" href="style.css">
-		<script src="../src/html5shiv-printshiv.js"></script>
+		<title>HTML5.js Test Suite</title>
+		<link rel="stylesheet" href="../vendor/qunit/qunit/qunit.css">
 	</head>
 	<body>
-		<h1>
-			HTML5 Shiv Tests
-		</h1>
-		<ul>
-			<li>
-				<a href="html.1.html">html.1.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="html.2.html">html.2.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="html.3-display-test.html">html.3-display-test.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="iframe.1.html">iframe.1.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.1.html">javascript.1.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.2.html">javascript.2.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.3.html">javascript.3.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.4.html">javascript.4.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.5.html">javascript.5.html</a>: <span class="fail">FAIL in IE&lt;9</span> and <span class="pass">PASS in emulated IE&lt;9</span>
-			</li>
-			<li>
-				<a href="javascript.crash.html">javascript.crash.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.dojo.1.html">javascript.dojo.1.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.dojo.2.html">javascript.dojo.2.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.jquery.1.html">javascript.jquery.1.html</a>: <span class="fail">FAIL in IE&lt;9</span> and <span class="pass">PASS in emulated IE&lt;9</span>
-			</li>
-			<li>
-				<a href="javascript.jquery.2.html">javascript.jquery.2.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="javascript.prototype.1.html">javascript.prototype.1.html</a>: <span class="fail">FAIL in IE&lt;9</span>
-			</li>
-			<li>
-				<a href="javascript.yui.1.html">javascript.yui.1.html</a>: <span class="fail">FAIL in IE&lt;9</span>
-			</li>
-			<li>
-				<a href="object-test.html">object-test.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="mixed-test.html">mixed-test.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="simple-printless.html">simple-printless.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="highcharts/area-basic.html">area-basic.html</a>: <span class="pass">PASS</span>
-			</li>
-			<li>
-				<a href="jquery-1.7.1/index.html">simplified jQuery test suite</a>:
-			</li>
-			<li>
-				<a href="perf.1.html">mixed performance test</a>
-			</li>
-			<li>
-				<a href="perf.2.html">pure createElement/createDocumentFragment performance test</a>
-			</li>
-		</ul>
-	<body>
+		<h1 id="qunit-header">HTML5.js Test Suite</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<script src="../vendor/qunit/qunit/qunit.js"></script>
+		<script>var html5_2;</script>
+		<script src="../html5.js"></script>
+		<script src="../vendor/requirejs/require.js"></script>
+		<script>
+			if (/[?&]norequire=true(?:&|$)/.test(location.search)) {
+				require = define = null;
+				document.write('<script src="test.js"><\/script>');
+			}
+			else {
+				require({
+					'baseUrl': '../vendor/requirejs/',
+					'urlArgs': 't=' + (+new Date),
+					'paths': {
+						'html5': '../../html5'
+					}
+				},
+				['html5'], function(html5) {
+					html5_2 = html5;
+					require(['test.js']);
+				});
+			}
+		</script>
+	</body>
 </html>
