@@ -30,9 +30,6 @@
   /** Used to detect elements that cannot be cloned correctly */
   var reUnclonable = /^<\?/;
 
-  /** Used to prevent a `removeChild` memory leak in IE < 9 */
-  var trash = document.createElement('div');
-
   /** Used as a fallback for `element.uniqueNumber` */
   var uid = 1;
 
@@ -209,14 +206,14 @@
     setTimeout(function(node) {
       return function() {
         node.style.setExpression('display', 0);
-        node.removeAttribute(expando);
+        node.removeAttribute('expando');
         node.attachEvent('onpropertychange', onPropertyChange);
       };
     }(this), 0);
 
     // set a flag to avoid processing the element again
     // use a non-primitive value for the property to hide it from `outerHTML`
-    this[expando] = {};
+    this['expando'] = {};
 
     // simulate `audio[controls]` and `[hidden]` support
     return (this.controls === '' || this.controls) && this.nodeName.toLowerCase() == 'audio'
@@ -267,8 +264,10 @@
    * Destroys the given element.
    * @private
    * @param {Element} element The element to destroy.
+   * @param {Object} [cache] The cache object.
    */
-  function destroyElement(element) {
+  function destroyElement(element, cache) {
+    var trash = (cache || getCache(element.ownerDocument)).trash;
     trash.appendChild(element);
     trash.innerHTML = '';
   }
@@ -285,11 +284,27 @@
         skip = support.unknownElements;
 
     return html5Cache[id] || (html5Cache[id] = {
-      'createElement': skip ? false : createElements(ownerDocument).createElement,
-      'createDocumentFragment': skip ? false : ownerDocument.createDocumentFragment,
-      'frag': skip ? false : createElements(ownerDocument.createDocumentFragment()),
-      'nodes': {}
+      'frag': !skip && createElements(ownerDocument.createDocumentFragment()),
+      'nodes': {},
+      'trash': ownerDocument.createElement('div'),
+      'createDocumentFragment': !skip && ownerDocument.createDocumentFragment,
+      'createElement': !skip && createElements(ownerDocument).createElement
     });
+  }
+
+  /**
+   * Removes the given print wrappers, leaving the original elements.
+   * @private
+   * @param {Document} ownerDocument The document.
+   * @params {Array} wrappers An array of wrappers.
+   */
+  function removePrintWrappers(ownerDocument, wrappers) {
+    var cache = getCache(ownerDocument),
+        index = wrappers.length;
+
+    while (index--) {
+      destroyElement(wrappers[index].removeNode(), cache);
+    }
   }
 
   /**
@@ -326,7 +341,7 @@
     // allow a small amount of repeated code for better performance
     ownerDocument.createElement = function(nodeName) {
       var cached = nodes[nodeName],
-          node = cached ? cache.cloneNode() : create(nodeName);
+          node = cached ? cached.cloneNode() : create(nodeName);
 
       if (!cached && !unclonables[nodeName] &&
           !(unclonables[nodeName] = reUnclonable.test(node.outerHTML))) {
@@ -362,7 +377,7 @@
           collection = ownerDocument.styleSheets,
           cssText = [],
           index = collection.length,
-          sheets = Array(index);
+          sheets = [];
 
       // convert styleSheets collection to an array
       while (index--) {
@@ -389,8 +404,8 @@
 
     ownerWindow.attachEvent('onafterprint', cache.onafterprint = function() {
       // remove wrappers, leaving the original elements, and remove print style sheet
-      removePrintWrappers(wrappers);
-      destroyElement(printSheet);
+      removePrintWrappers(ownerDocument, wrappers);
+      destroyElement(printSheet, cache);
     });
 
     if (typeof namespaces[namespace] == 'undefined') {
@@ -429,20 +444,10 @@
             'object,ol,optgroup,option,p,pre,q,samp,select,small,span,strong,sub,' +
             'sup,table,tbody,td,textarea,tfoot,th,thead,tr,tt,ul,var,' + nodeNames
         ) +
-        '{display:expression(this.' + expando + '||html5._computeExpression.call(this))}'
+        '{display:expression(this.' + expando + '||(' +
+        ('' + computeExpression).replace(/^[^(]+/, 'function').replace(/expando/g, expando) +
+        ').call(this))}'
     ));
-  }
-
-  /**
-   * Removes the given print wrappers, leaving the original elements.
-   * @private
-   * @params {Array} wrappers An array of wrappers.
-   */
-  function removePrintWrappers(wrappers) {
-    var index = wrappers.length;
-    while (index--) {
-      destroyElement(wrappers[index].removeNode());
-    }
   }
 
   /**
@@ -486,7 +491,7 @@
         sheet = cache.sheet;
 
     if (sheet) {
-      cache.sheet = !destroyElement(sheet);
+      cache.sheet = destroyElement(sheet, cache);
       if (options.expressions && !options.styles) {
         // add styles minus CSS expressions
         setStyles(ownerDocument, {});
@@ -627,7 +632,6 @@
     });
 
     if (!support.html5Styles && options.styles) {
-      getCache(ownerDocument);
       setStyles(ownerDocument, options);
     }
     if (!support.html5Printing && options.print) {
@@ -705,9 +709,6 @@
     // an object of feature detection flags
     'support': support,
 
-    // pseudo private method used by IE6 CSS expressions
-    '_computeExpression': computeExpression,
-
     // creates shimmed document fragments
     'createDocumentFragment': createDocumentFragment,
 
@@ -722,9 +723,6 @@
   };
 
   /*--------------------------------------------------------------------------*/
-
-  // install support for basic HTML5 element parsing
-  install();
 
   // expose html5
   // via an AMD loader
