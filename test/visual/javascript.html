@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="css/style.css">
 		<script src="../../html5.js"></script>
 		<script>
-			html5.install({ 'all': true });
+			html5.install('all');
 		</script>
 		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
@@ -33,7 +33,7 @@
 				// test DOM methods
 				var div = document.createElement('div');
 				div.innerHTML = '<section>This DOM innerHTML sentence is in a green box <mark>with these words highlighted</mark>?</section>';
-				body.insertBefore(div, document.body.firstChild);
+				body.appendChild(div);
 
 				var frag = document.createDocumentFragment();
 				var fragDiv = frag.appendChild(document.createElement('div'));
