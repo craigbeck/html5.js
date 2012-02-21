@@ -9,6 +9,21 @@
   /*--------------------------------------------------------------------------*/
 
   /**
+   * An iteration utility.
+   * @private
+   * @param {Array} array The array to iterate over.
+   * @param {Function} callback The function called per iteration.
+   */
+  function each(array, callback) {
+    var index = -1,
+        length = array.length;
+
+    while (++index < length) {
+      callback(array[index], index, array);
+    }
+  }
+
+  /**
    * Executes a code snippet from inside an iframe and passes the result to the callback.
    * @private
    * @param {String} code The code to execute.
@@ -111,39 +126,49 @@
       ok(div.childNodes.length == 1, 'basic HTML5 element parsing');
     })
 
-    html5.install('methods styles');
+    each(['string', 'object'], function(optionType) {
+      html5.install(optionType == 'string' ? 'methods styles' : { 'methods': true, 'styles': true });
 
-    if (support.unknownElements) {
-      skipTest(4);
-    }
-    else {
-      ok(!isNative(document, 'createElement') && !isNative(document, 'createDocumentFragment'), 'native methods overwritten');
-      html5.uninstall('methods');
-      ok(isNative(document, 'createElement') && isNative(document, 'createDocumentFragment'), 'native methods restored');
+      if (support.unknownElements) {
+        skipTest(4);
+      }
+      else {
+        ok(!isNative(document, 'createElement') &&
+           !isNative(document, 'createDocumentFragment'), 'native methods overwritten with ' + optionType + ' options');
 
-      executeInIframe('html5.install(doc,"methods styles")', function(document) {
-        ok(!isNative(document, 'createElement') && !isNative(document, 'createDocumentFragment'), 'native methods overwritten in iframe');
-      });
-      executeInIframe('html5.uninstall(html5.install(doc,"methods styles"),"methods")', function(document) {
-        ok(isNative(document, 'createElement') && isNative(document, 'createDocumentFragment'), 'native methods restored in iframe');
-      });
-    }
+        html5.uninstall(optionType == 'string' ? 'methods' : { 'methods': true });
 
-    if (support.html5Styles) {
-      skipTest(4);
-    }
-    else {
-      ok(sheetCount < sheets.length, 'style sheet added');
-      html5.uninstall('styles');
-      ok(sheetCount == sheets.length, 'style sheet removed');
+        ok(isNative(document, 'createElement') &&
+           isNative(document, 'createDocumentFragment'), 'native methods restored with ' + optionType + ' options');
 
-      executeInIframe('[doc.styleSheets.length, html5.install(doc,"methods styles").styleSheets.length]', function(pair) {
-        ok(pair[0] < pair[1], 'style sheet added in iframe');
-      });
-      executeInIframe('[doc.styleSheets.length, html5.uninstall(html5.install(doc,"methods styles"),"styles").styleSheets.length]', function(pair) {
-        ok(pair[0] === pair[1], 'style sheet removed in iframe');
-      });
-    }
+        executeInIframe('html5.install(doc,' + (optionType == 'string' ? '"methods")' : '{"methods":true})'), function(document) {
+          ok(!isNative(document, 'createElement') &&
+             !isNative(document, 'createDocumentFragment'), 'native methods overwritten in iframe with ' + optionType + ' options');
+        });
+
+        executeInIframe('html5.uninstall(html5.install(doc,' + (optionType == 'string' ? '"methods"),"methods")' : '{"methods":true}),{"methods":true})'), function(document) {
+          ok(isNative(document, 'createElement') &&
+             isNative(document, 'createDocumentFragment'), 'native methods restored in iframe with ' + optionType + ' options');
+        });
+      }
+
+      if (support.html5Styles) {
+        skipTest(4);
+      }
+      else {
+        ok(sheetCount < sheets.length, 'style sheet added with ' + optionType + ' options');
+        html5.uninstall(optionType == 'string' ? 'styles' : { 'styles': true });
+        ok(sheetCount == sheets.length, 'style sheet removed with ' + optionType + ' options');
+
+        executeInIframe('[doc.styleSheets.length,html5.install(doc,' + (optionType == 'string' ? '"styles"' : '{"styles":true}') + ').styleSheets.length]', function(pair) {
+          ok(pair[0] < pair[1], 'style sheet added in iframe with ' + optionType + ' options');
+        });
+
+        executeInIframe('[doc.styleSheets.length,html5.uninstall(html5.install(doc,' + (optionType == 'string' ? '"styles"),"styles"' : '{"styles":true}),{"styles":true}') + ').styleSheets.length]', function(pair) {
+          ok(pair[0] === pair[1], 'style sheet removed in iframe with ' + optionType + ' options');
+        });
+      }
+    });
   });
 
 }(this));
