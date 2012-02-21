@@ -28,7 +28,7 @@
   var reSkip = /^<|^(?:button|form|map|select|textarea)$/i;
 
   /** Used to detect elements that cannot be cloned correctly */
-  var reUnclonable = /^<:/;
+  var reUnclonable = /^<\?/;
 
   /** Used to prevent a `removeChild` memory leak in IE < 9 */
   var trash = document.createElement('div');
@@ -326,12 +326,11 @@
     // allow a small amount of repeated code for better performance
     ownerDocument.createElement = function(nodeName) {
       var cached = nodes[nodeName],
-          node = cached ? cached.cloneNode() : create(nodeName);
+          node = cached ? cache.cloneNode() : create(nodeName);
 
-      if (!cached && !unclonables[nodeName]) {
-        reUnclonable.test(node.outerHTML)
-          ? (unclonables[nodeName] = true)
-          : (nodes[nodeName] = node);
+      if (!cached && !unclonables[nodeName] &&
+          !(unclonables[nodeName] = reUnclonable.test(node.outerHTML))) {
+        node = (nodes[nodeName] = node).cloneNode();
       }
       return node.canHaveChildren && !reSkip.test(nodeName) ? frag.appendChild(node) : node;
     };
@@ -531,13 +530,12 @@
     var cache = getCache(ownerDocument),
         nodes = cache.nodes,
         cached = nodes[nodeName],
-        node = cached ? node.cloneNode() : cache.createElement(nodeName);
+        node = cached ? cached.cloneNode() : cache.createElement(nodeName);
 
     // IE < 9 doesn't clone unknown elements correctly
-    if (!cached && !unclonables[nodeName]) {
-      reUnclonable.test(node.outerHTML)
-        ? (unclonables[nodeName] = true)
-        : (nodes[nodeName] = node);
+    if (!cached && !unclonables[nodeName] &&
+        !(unclonables[nodeName] = reUnclonable.test(node.outerHTML))) {
+      node = (nodes[nodeName] = node).cloneNode();
     }
     return node.canHaveChildren && !reSkip.test(nodeName) ? cache.frag.appendChild(node) : node;
   }
