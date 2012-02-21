@@ -10,6 +10,7 @@
 * [`html5.createDocumentFragment`](#html5.createDocumentFragment)
 * [`html5.createElement`](#html5.createElement)
 * [`html5.install`](#html5.install)
+* [`html5.noConflict`](#html5.noConflict)
 * [`html5.uninstall`](#html5.uninstall)
 
 <!-- /div -->
@@ -38,7 +39,7 @@
 
 <!-- div -->
 
-### <a id="html5" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L705" title="View in source">`html5`</a>
+### <a id="html5" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L720" title="View in source">`html5`</a>
 *(Object)*: The `html5` object.
 [&#9650;][1]
 
@@ -47,7 +48,7 @@
 
 <!-- div -->
 
-### <a id="html5.createDocumentFragment" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L558" title="View in source">`html5.createDocumentFragment([ownerDocument=document])`</a>
+### <a id="html5.createDocumentFragment" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L564" title="View in source">`html5.createDocumentFragment([ownerDocument=document])`</a>
 Creates a shimmed document fragment.
 [&#9650;][1]
 
@@ -71,7 +72,7 @@ parent.html5.createDocumentFragment(document);
 
 <!-- div -->
 
-### <a id="html5.createElement" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L514" title="View in source">`html5.createElement([ownerDocument=document], nodeName)`</a>
+### <a id="html5.createElement" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L521" title="View in source">`html5.createElement([ownerDocument=document], nodeName)`</a>
 Creates a shimmed element of the given node name.
 [&#9650;][1]
 
@@ -96,7 +97,7 @@ parent.html5.createElement(document, 'div');
 
 <!-- div -->
 
-### <a id="html5.install" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L616" title="View in source">`html5.install([ownerDocument=document, options={}])`</a>
+### <a id="html5.install" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L622" title="View in source">`html5.install([ownerDocument=document, options={}])`</a>
 Installs shims according to the specified options.
 [&#9650;][1]
 
@@ -158,7 +159,19 @@ html5.install({
 
 <!-- div -->
 
-### <a id="html5.uninstall" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L680" title="View in source">`html5.uninstall([ownerDocument=document, options={}])`</a>
+### <a id="html5.noConflict" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L656" title="View in source">`html5.noConflict()`</a>
+Restores a previously overwritten `html5` object.
+[&#9650;][1]
+
+#### Returns
+*(Object)*: The current `html5` object.
+
+<!-- /div -->
+
+
+<!-- div -->
+
+### <a id="html5.uninstall" href="https://github.com/bestiejs/html5.js/blob/master/html5.js#L695" title="View in source">`html5.uninstall([ownerDocument=document, options={}])`</a>
 Uninstalls shims according to the specified options.
 [&#9650;][1]
 

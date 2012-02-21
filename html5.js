@@ -12,6 +12,9 @@
   /** Cache of created elements, document methods, and install state */
   var html5Cache = {};
 
+  /** Previous `html5` object */
+  var old = window['html5'];
+
   /** List of HTML5 node names to install support for */
   var nodeNames = 'abbr article aside audio bdi canvas data datalist details figcaption figure footer header hgroup mark meter nav output progress section summary time video'.split(' ');
 
@@ -646,6 +649,16 @@
   }
 
   /**
+   * Restores a previously overwritten `html5` object.
+   * @memberOf html5
+   * @returns {Object} The current `html5` object.
+   */
+  function noConflict() {
+    window['html5'] = old;
+    return this;
+  }
+
+  /**
    * Uninstalls shims according to the specified options.
    * @memberOf html5
    * @param {Document} [ownerDocument=document] The document.
@@ -718,6 +731,9 @@
     // installs shims
     'install': install,
 
+    // avoid `html5` object conflicts
+    'noConflict': noConflict,
+
     // uninstalls shims
     'uninstall': uninstall
   };
@@ -725,16 +741,13 @@
   /*--------------------------------------------------------------------------*/
 
   // expose html5
+  // use square bracket notation so Closure Compiler won't munge `html5`
+  // http://code.google.com/closure/compiler/docs/api-tutorial3.html#export
+  window['html5'] = html5;
+
   // via an AMD loader
-  if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-    define('html5', function() {
-      return html5;
-    });
-  }
-  // in a browser
-  else {
-    // use square bracket notation so Closure Compiler won't munge `html5`
-    // http://code.google.com/closure/compiler/docs/api-tutorial3.html#export
-    window['html5'] = html5;
+  if (typeof define == 'function' && typeof define.amd == 'object' &&
+      define.amd && define.amd.html5) {
+    define('html5', function() { return html5; });
   }
 }(this, document));

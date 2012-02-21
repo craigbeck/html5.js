@@ -171,4 +171,19 @@
     });
   });
 
+  test('html5.noConflict', function() {
+    var pair = [html5, html5.noConflict()];
+    equal(pair[0], pair[1], 'returns `html5` object');
+    strictEqual(window.html5, 1, 'restores overwritten value');
+    window.html5 = pair[0];
+  });
+
+  test('require("html5")', function() {
+    if (window.require) {
+      strictEqual(((html5_2 || 0).support || 0).unknownElements, html5.support.unknownElements, 'require("html5")');
+    } else {
+      skipTest(1);
+    }
+  });
+
 }(this));

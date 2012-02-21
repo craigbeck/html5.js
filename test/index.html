@@ -12,7 +12,7 @@
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
 		<script src="../vendor/qunit/qunit/qunit.js"></script>
-		<script>var html5_2;</script>
+		<script>var html5_2, html5 = 1;</script>
 		<script src="../html5.js"></script>
 		<script src="../vendor/requirejs/require.js"></script>
 		<script>
@@ -21,6 +21,7 @@
 				document.write('<script src="test.js"><\/script>');
 			}
 			else {
+				define.amd.html5 = true;
 				require({
 					'baseUrl': '../vendor/requirejs/',
 					'urlArgs': 't=' + (+new Date),
@@ -29,7 +30,7 @@
 					}
 				},
 				['html5'], function(html5) {
-					html5_2 = html5;
+					html5_2 = html5.noConflict();
 					require(['test.js']);
 				});
 			}
