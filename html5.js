@@ -1,5 +1,5 @@
 /*!
- * HTML5.js v1.0
+ * HTML5.js v1.0.0-rc
  * Copyright 2012 John-David Dalton <http://allyoucanleet.com/>
  * Based on HTML5 Shiv vpre3.3 | @afarkas @jon_neal @rem | MIT/GPL2 Licensed
  * Available under MIT/GPL2 license
@@ -118,6 +118,48 @@
   /*--------------------------------------------------------------------------*/
 
   /**
+   * Compiled into a style sheet to compute the result of an IE6 CSS expression.
+   * @private
+   * @type String
+   */
+  var computeExpression = String(function() {
+    // to avoid circular memory leaks the `this` binding is set to the matched element
+    function onPropertyChange(event) {
+      var node = event.srcElement,
+          prop = event.propertyName;
+
+      if (prop == 'hidden' || prop == 'controls' && node.nodeName.toLowerCase() == 'audio') {
+        var specified = node[prop] === '' || node[prop],
+            style = node.style;
+
+        style.display = prop == 'hidden'
+          ? (specified ? 'none' : '')
+          : (specified ? (style.zoom = 1, 'inline') : (style.zoom = 'normal', ''));
+      }
+    }
+    // overwrite the CSS expression and hookup event handlers
+    setTimeout(function(node) {
+      return function() {
+        node.style.setExpression('display', 0);
+        node.removeAttribute('expando');
+        node.attachEvent('onpropertychange', onPropertyChange);
+      };
+    }(this), 0);
+
+    // set a flag to avoid processing the element again
+    // use a non-primitive value for the property to hide it from `outerHTML`
+    this['expando'] = {};
+
+    // simulate `audio[controls]` and `[hidden]` support
+    return (this.controls === '' || this.controls) && this.nodeName.toLowerCase() == 'audio'
+      ? (this.style.zoom = 1, 'inline')
+      : (this.hidden === '' || this.hidden ? 'none' : '');
+  })
+  .replace(/expando/g, expando);
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
    * Creates a style sheet of modified CSS rules to style the print wrappers.
    * (eg. the CSS rule "header{}" becomes "html5js\:header{}")
    * @private
@@ -183,45 +225,6 @@
 
     p.innerHTML = 'x<style>' + cssText + '</style>';
     return parent.insertBefore(p.lastChild, parent.firstChild);
-  }
-
-  /**
-   * Computes an IE6 CSS expression.
-   * @private
-   * @returns {String} The expression result.
-   */
-  function computeExpression() {
-    // to avoid circular memory leaks the `this` binding is set to the matched element
-    function onPropertyChange(event) {
-      var node = event.srcElement,
-          prop = event.propertyName;
-
-      if (prop == 'hidden' || prop == 'controls' && node.nodeName.toLowerCase() == 'audio') {
-        var specified = node[prop] === '' || node[prop],
-            style = node.style;
-
-        style.display = prop == 'hidden'
-          ? (specified ? 'none' : '')
-          : (specified ? (style.zoom = 1, 'inline') : (style.zoom = 'normal', ''));
-      }
-    }
-    // overwrite the CSS expression and hookup event handlers
-    setTimeout(function(node) {
-      return function() {
-        node.style.setExpression('display', 0);
-        node.removeAttribute('expando');
-        node.attachEvent('onpropertychange', onPropertyChange);
-      };
-    }(this), 0);
-
-    // set a flag to avoid processing the element again
-    // use a non-primitive value for the property to hide it from `outerHTML`
-    this['expando'] = {};
-
-    // simulate `audio[controls]` and `[hidden]` support
-    return (this.controls === '' || this.controls) && this.nodeName.toLowerCase() == 'audio'
-      ? (this.style.zoom = 1, 'inline')
-      : (this.hidden === '' || this.hidden ? 'none' : '');
   }
 
   /**
@@ -447,9 +450,7 @@
             'object,ol,optgroup,option,p,pre,q,samp,select,small,span,strong,sub,' +
             'sup,table,tbody,td,textarea,tfoot,th,thead,tr,tt,ul,var,' + nodeNames
         ) +
-        '{display:expression(this.' + expando + '||(' +
-        ('' + computeExpression).replace(/^[^(]+/, 'function').replace(/expando/g, expando) +
-        ').call(this))}'
+        '{display:expression(this.' + expando + '||(' + computeExpression + ').call(this))}'
     ));
   }
 
@@ -719,6 +720,14 @@
    */
   var html5 = {
 
+    /**
+     * The semantic version number.
+     * @static
+     * @memberOf html5
+     * @type String
+     */
+    'version': '1.0.0-rc',
+
     // an object of feature detection flags
     'support': support,
 
@@ -740,14 +749,21 @@
 
   /*--------------------------------------------------------------------------*/
 
-  // expose html5
-  // use square bracket notation so Closure Compiler won't munge `html5`
+  // Expose `html5` to the global before exposing as a module so other AMD
+  // modules can use `html5.noConflict` to remove this version from the global.
+  // Use square bracket notation so Closure Compiler won't munge `html5`.
   // http://code.google.com/closure/compiler/docs/api-tutorial3.html#export
   window['html5'] = html5;
 
-  // via an AMD loader
+  // Expose `html5` as an AMD module, but only for AMD loaders that understand
+  // the issues with loading multiple versions of html5.js which might all
+  // call `define`. The loader will indicate it allows multiple html5.js
+  // versions by specifying `define.amd.html5 = true`.
   if (typeof define == 'function' && typeof define.amd == 'object' &&
       define.amd && define.amd.html5) {
+    // Register as a named module to avoid problems if html5.js is concatenated
+    // with other files that may use `define`, but not use a concatenation script
+    // that understands anonymous AMD modules.
     define('html5', function() { return html5; });
   }
 }(this, document));

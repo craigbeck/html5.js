@@ -21,7 +21,7 @@
   // generate Markdown
   $markdown = docdown(array(
     'path' => '../' . $file,
-    'title' => 'HTML5.js API documentation',
+    'title' => 'HTML5.js <sup>v1.0.0-rc</sup>',
     'url'  => 'https://github.com/bestiejs/html5.js/blob/master/html5.js'
   ));
 
