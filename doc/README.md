@@ -153,7 +153,7 @@ html5.install('print styles');
 // from a child iframe with options
 parent.html5.install(document, options);
 
-// using a shortcut to install all support
+// using a shortcut to install all support extensions
 html5.install('all');
 
 // special note:
@@ -217,7 +217,7 @@ html5.uninstall('print styles');
 // from a child iframe with options
 parent.html5.uninstall(document, options);
 
-// using a shortcut to uninstall all support
+// using a shortcut to uninstall all support extensions
 html5.uninstall('all');
 ~~~
 
