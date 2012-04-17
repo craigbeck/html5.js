@@ -5,6 +5,7 @@
  * Available under MIT/GPL2 license
  */
 ;(function(window, document) {
+  'use strict';
 
   /** Preset for the install/uninstall methods */
   var allOptions = { 'expressions': true, 'methods': true, 'print': true, 'styles': true };
@@ -161,7 +162,7 @@
 
   /**
    * Creates a style sheet of modified CSS rules to style the print wrappers.
-   * (eg. the CSS rule "header{}" becomes "html5js\:header{}")
+   * (e.g. the CSS rule "header{}" becomes "html5js\:header{}")
    * @private
    * @param {Document} ownerDocument The document.
    * @param {String} cssText The CSS text.
@@ -184,7 +185,7 @@
 
   /**
    * Wraps all HTML5 elements in the given document with printable elements.
-   * (eg. the "header" element is wrapped with the "html5js:header" element)
+   * (e.g. the "header" element is wrapped with the "html5js:header" element)
    * @private
    * @param {Document} ownerDocument The document.
    * @returns {Array} An array of added wrappers.
@@ -320,7 +321,9 @@
    * @returns {Object} The options object.
    */
   function resolveOptions(value) {
+    var key;
     value = value ? (value === 'all' || value.all ? allOptions : value) : {};
+
     if (typeof value == 'string') {
       var object = {};
       value = value.split(/[, ]+/);
@@ -737,13 +740,13 @@
     // creates shimmed elements
     'createElement': createElement,
 
-    // installs shims
+    // installs support extensions
     'install': install,
 
     // avoid `html5` object conflicts
     'noConflict': noConflict,
 
-    // uninstalls shims
+    // uninstalls support extensions
     'uninstall': uninstall
   };
 
