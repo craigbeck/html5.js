@@ -42,6 +42,7 @@
 
   /**
    * An object used to flag features.
+   * 
    * @static
    * @memberOf html5
    * @type Object
@@ -82,6 +83,7 @@
 
     /**
      * Detect whether the browser supports unknown elements.
+     *
      * @memberOf html5.support
      * @type Boolean
      */
@@ -101,6 +103,7 @@
 
     /**
      * Detect whether the browser supports printing html5 elements.
+     *
      * @memberOf html5.support
      * @type Boolean
      */
@@ -120,6 +123,7 @@
 
   /**
    * Compiled into a style sheet to compute the result of an IE6 CSS expression.
+   *
    * @private
    * @type String
    */
@@ -163,6 +167,7 @@
   /**
    * Creates a style sheet of modified CSS rules to style the print wrappers.
    * (e.g. the CSS rule "header{}" becomes "html5js\:header{}")
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @param {String} cssText The CSS text.
@@ -186,6 +191,7 @@
   /**
    * Wraps all HTML5 elements in the given document with printable elements.
    * (e.g. the "header" element is wrapped with the "html5js:header" element)
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @returns {Array} An array of added wrappers.
@@ -208,6 +214,7 @@
 
   /**
    * Creates a style sheet with the given CSS text and adds it to the document.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @param {String} cssText The CSS text.
@@ -231,6 +238,7 @@
   /**
    * Creates HTML5 elements using the given document enabling the document to
    * parse them correctly.
+   *
    * @private
    * @param {Document|Fragment} ownerDocument The document.
    * @returns {Document|Fragment} The document.
@@ -247,6 +255,7 @@
 
   /**
    * Creates a printable wrapper for the given element.
+   *
    * @private
    * @param {Element} element The element.
    * @returns {Element} The wrapper.
@@ -269,6 +278,7 @@
 
   /**
    * Destroys the given element.
+   *
    * @private
    * @param {Element} element The element to destroy.
    * @param {Object} [cache] The cache object.
@@ -281,6 +291,7 @@
 
   /**
    * Gets the cache object for the given document.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @returns {Object} The cache object.
@@ -301,6 +312,7 @@
 
   /**
    * Removes the given print wrappers, leaving the original elements.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @params {Array} wrappers An array of wrappers.
@@ -316,6 +328,7 @@
 
   /**
    * Resolves an options object from the given value.
+   *
    * @private
    * @param {Mixed} value The value to convert to an options object.
    * @returns {Object} The options object.
@@ -338,6 +351,7 @@
   /**
    * Overwrites the document's `createElement` and `createDocumentFragment` methods
    * with `html5.createElement` and `html5.createDocumentFragment` equivalents.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    */
@@ -369,6 +383,7 @@
 
   /**
    * Adds support for printing HTML5 elements.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    */
@@ -424,6 +439,7 @@
 
   /**
    * Adds default HTML5 element styles to the given document.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @param {Object} options Options object.
@@ -459,6 +475,7 @@
 
   /**
    * Restores the document's original `createElement` and `createDocumentFragment` methods.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    */
@@ -476,6 +493,7 @@
 
   /**
    * Removes support for printing HTML5 elements.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    */
@@ -489,6 +507,7 @@
 
   /**
    * Removes default HTML5 element styles.
+   *
    * @private
    * @param {Document} ownerDocument The document.
    * @param {Object} options Options object.
@@ -510,6 +529,7 @@
 
   /**
    * Creates a shimmed element of the given node name.
+   *
    * @memberOf html5
    * @param {Document} [ownerDocument=document] The context document.
    * @param {String} nodeName The node name of the element to create.
@@ -554,6 +574,7 @@
 
   /**
    * Creates a shimmed document fragment.
+   *
    * @memberOf html5
    * @param {Document} [ownerDocument=document] The context document.
    * @returns {Fragment} The created document fragment.
@@ -574,6 +595,7 @@
 
   /**
    * Installs shims according to the specified options.
+   *
    * @memberOf html5
    * @param {Document} [ownerDocument=document] The document.
    * @param {Object} [options={}] Options object.
@@ -664,6 +686,7 @@
 
   /**
    * Uninstalls shims according to the specified options.
+   *
    * @memberOf html5
    * @param {Document} [ownerDocument=document] The document.
    * @param {Object} [options={}] Options object.
