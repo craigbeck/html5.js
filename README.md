@@ -2,9 +2,9 @@
 
 The **new** defacto standard HTML5 element support library.
 
-## BestieJS
+## BestieJS Incubator
 
-HTML5.js is part of the BestieJS *"Best in Class"* module collection. This means we promote solid browser/environment support, ES5 precedents, unit testing, and plenty of documentation.
+HTML5.js still needs a little work to be worthy of the title *"Best in Class"*. Please, feel free to contribute additional unit tests or documentation.
 
 ## Documentation
 
@@ -84,8 +84,6 @@ git clone https://github.com/bestiejs/html5.js.git
 cd html5.js
 git submodule update --init
 ~~~
-
-Feel free to fork if you see possible improvements!
 
 ## Author
 
